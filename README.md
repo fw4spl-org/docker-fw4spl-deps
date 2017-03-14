@@ -45,5 +45,5 @@ CONTAINER ID        IMAGE                                  COMMAND              
 And then copy your package to some place:
 
 ```
-# docker cp romantic_mahavira:/home/build/deps/build/debug/BinPkgs-11.0.1-Linux.tar.gz /some/place
+# docker cp romantic_mahavira:/home/build/deps/build/Debug/BinPkgs-11.0.1-Linux.tar.gz /some/place
 ```
