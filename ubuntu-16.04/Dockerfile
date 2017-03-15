@@ -1,5 +1,6 @@
 FROM ubuntu:16.04
 ARG buildtype=Debug
+ARG branch=dev
 
 # system update
 RUN apt-get update && yes | apt-get upgrade -y
@@ -22,7 +23,7 @@ RUN git clone https://github.com/fw4spl-org/fw4spl-deps.git deps/src/fw4spl-deps
 
 WORKDIR /home/build/deps/src/fw4spl-deps
 
-RUN git checkout dev
+RUN git checkout $branch
 
 # configure
 WORKDIR /home/build/deps/build/${buildtype}
