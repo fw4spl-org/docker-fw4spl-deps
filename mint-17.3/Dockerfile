@@ -1,22 +1,14 @@
-FROM cdbishop89/linux-mint-17.3:latest
+FROM vcatechnology/linux-mint:17.3
 ARG buildtype=Debug
 ARG branch=dev
 
-# modemmanager causes troubles on update because upstart is not there
-# of course this is *specific* to the docker image so don't do that on a real install !
-RUN rm /var/lib/dpkg/info/modemmanager.* && dpkg --remove --force-remove-reinstreq modemmanager
-
-# change default mirrors - this is for now hardcoded for a location near France or Germany
-# you may want to comment this out or adapt to you own location
-RUN sed -i 's!packages.linuxmint.com!ftp-stud.hs-esslingen.de/pub/Mirrors/packages.linuxmint.com!' /etc/apt/sources.list.d/official-package-repositories.list && sed -i 's!archive.ubuntu.com/ubuntu!bouyguestelecom.ubuntu.lafibre.info/ubuntu!' /etc/apt/sources.list.d/official-package-repositories.list
-
 # system update
-RUN apt-get update && apt-get install -y mint-mirrors mintsources mintupdate && apt-get update && yes | apt-get upgrade -y
+RUN apt-get update && yes | apt-get upgrade -y
 
 # install build dependencies
-RUN apt-get install -y build-essential git clang-3.8
+RUN apt-get install -y build-essential git clang-3.8 wget
 RUN ln -s /usr/bin/clang++-3.8 /usr/bin/clang++ && ln -s /usr/bin/clang-3.8 /usr/bin/clang
-RUN apt-get install -y '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libasound2-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libssl-dev libxt-dev libvlc-dev libvlccore-dev libudev-dev libxaw7-dev libxrandr-dev
+RUN apt-get install -y '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libasound2-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libssl-dev libxt-dev libvlc-dev libvlccore-dev vlc-nox libudev-dev libusb-1.0-0-dev libxaw7-dev libxrandr-dev
 RUN apt-get clean && apt-get autoclean
 RUN wget https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz && tar xzvf cmake-3.7.2-Linux-x86_64.tar.gz -C /usr/local --strip-components=1
 
@@ -32,7 +24,7 @@ RUN git clone https://github.com/fw4spl-org/fw4spl-ext-deps.git deps/src/ext-dep
 
 WORKDIR /home/build/deps/src/fw4spl-deps
 
-RUN git checkout $branch
+RUN git fetch origin $branch && git checkout $branch
 
 # configure
 WORKDIR /home/build/deps/build/${buildtype}
