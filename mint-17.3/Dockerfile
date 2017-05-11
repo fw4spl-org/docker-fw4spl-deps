@@ -29,7 +29,7 @@ RUN git fetch origin $branch && git checkout $branch
 # configure
 WORKDIR /home/build/deps/build/${buildtype}
 
-RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/home/build/deps/install/${buildtype} -DCMAKE_BUILD_TYPE:STRING="${buildtype}" -DCMAKE_C_COMPILER:PATH=/usr/bin/clang-3.8 -DCMAKE_CXX_COMPILER:PATH=/usr/bin/clang++-3.8 -DARCHIVE_DIR:PATH=/home/build/deps/build/archive -DADDITIONAL_DEPS:PATH=/home/build/deps/src/ext-deps -DENABLE_OPEN_MP:BOOL=ON -DENABLED_OGRE_DEPS:BOOL=ON -D ENABLED_PCL_DEPS:BOOL=ON -DENABLED_REALSENSE:BOOL=ON -DENABLED_SOFA_DEPS:BOOL=ON -DENABLE_ODIL:BOOL=ON -DENABLE_PTAM:BOOL=ON -DENABLE_OPENCV_CONTRIB:BOOL=ON /home/build/deps/src/fw4spl-deps
+RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/home/build/deps/install/${buildtype} -DCMAKE_BUILD_TYPE:STRING="${buildtype}" -DCMAKE_C_COMPILER:PATH=/usr/bin/clang-3.8 -DCMAKE_CXX_COMPILER:PATH=/usr/bin/clang++-3.8 -DARCHIVE_DIR:PATH=/home/build/deps/build/archive -DADDITIONAL_DEPS:PATH=/home/build/deps/src/ext-deps -DENABLE_OPEN_MP:BOOL=ON -DENABLED_OGRE_DEPS:BOOL=ON -D ENABLED_PCL_DEPS:BOOL=ON -DENABLED_REALSENSE:BOOL=ON -DENABLED_SOFA_DEPS:BOOL=ON -DENABLE_ODIL:BOOL=ON -DENABLED_BUILD_PTAM:BOOL=ON -DENABLED_BUILD_ORB_SLAM2:BOOL=OFF -DENABLE_OPENCV_CONTRIB:BOOL=ON /home/build/deps/src/fw4spl-deps
 
 WORKDIR /home/build/deps/build/${buildtype}
 
