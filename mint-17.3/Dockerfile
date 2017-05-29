@@ -1,6 +1,4 @@
 FROM vcatechnology/linux-mint:17.3
-ARG buildtype=Debug
-ARG branch=dev
 
 # system update
 RUN apt-get update && yes | apt-get upgrade -y
@@ -17,22 +15,15 @@ RUN useradd build && cd /home && mkdir build && chown build: build && su build
 
 WORKDIR /home/build
 
-# create build tree
-RUN mkdir deps deps/src deps/build deps/build/${buildtype} deps/install deps/install/${buildtype}
-RUN git clone https://github.com/fw4spl-org/fw4spl-deps.git deps/src/fw4spl-deps
-RUN git clone https://github.com/fw4spl-org/fw4spl-ext-deps.git deps/src/ext-deps
+RUN mkdir deps deps/build deps/install/
 
-WORKDIR /home/build/deps/src/fw4spl-deps
+VOLUME ["/home/build/deps/src/"]
 
-RUN git fetch origin $branch && git checkout $branch
+ADD run.sh /home/build/deps/build/run.sh
 
-# configure
-WORKDIR /home/build/deps/build/${buildtype}
+WORKDIR /home/build/deps/build/
 
-RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/home/build/deps/install/${buildtype} -DCMAKE_BUILD_TYPE:STRING="${buildtype}" -DCMAKE_C_COMPILER:PATH=/usr/bin/clang-3.8 -DCMAKE_CXX_COMPILER:PATH=/usr/bin/clang++-3.8 -DARCHIVE_DIR:PATH=/home/build/deps/build/archive -DADDITIONAL_DEPS:PATH=/home/build/deps/src/ext-deps -DENABLE_OPEN_MP:BOOL=ON -DENABLED_OGRE_DEPS:BOOL=ON -D ENABLED_PCL_DEPS:BOOL=ON -DENABLED_REALSENSE:BOOL=ON -DENABLED_SOFA_DEPS:BOOL=ON -DENABLE_ODIL:BOOL=ON -DENABLED_BUILD_PTAM:BOOL=ON -DENABLED_BUILD_ORB_SLAM2:BOOL=OFF -DENABLE_OPENCV_CONTRIB:BOOL=ON /home/build/deps/src/fw4spl-deps
+ENV BRANCH dev
+ENV BUILD Debug
 
-WORKDIR /home/build/deps/build/${buildtype}
-
-CMD make -j`grep processor -c /proc/cpuinfo` && make package
-
-
+CMD /home/build/deps/build/run.sh
