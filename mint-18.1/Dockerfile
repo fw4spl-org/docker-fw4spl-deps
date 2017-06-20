@@ -23,7 +23,7 @@ ADD run.sh /home/build/deps/build/run.sh
 
 WORKDIR /home/build/deps/build/
 
-ENV BRANCH dev
+ENV BRANCH master
 ENV BUILD Debug
 
 CMD /home/build/deps/build/run.sh
